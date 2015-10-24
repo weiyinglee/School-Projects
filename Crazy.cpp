@@ -10,48 +10,49 @@ void interactionMode();
 
 int main(int argc, char *argv[]){
 
-
-   string arg = argv[1];
-   string stringFile = argv[2];
-   vector<char> symbol;
-
-
-   if (arg == "-c"){ 
-      ifstream fin(stringFile.c_str());  // Can now compile on g++
-      if(fin.fail()){
-         //Fail to read file
-         cout << "Fail" << endl;
-      }else{
-         //Success read file
-         char c;
-
-         while(fin >> c){
-            symbol.push_back(c);
-         }
-         compileOutPut(symbol);
-      }
-   }
-   else if (arg == "-e"){
-      ifstream fin(stringFile.c_str());
-      if(fin.fail()){
-         //Fail to read file
-         cout << "Fail" << endl;
-      }else{
-         //Success read file
-         char c;
-         while(fin >> c){
-            //symbol.push_back(c);
-
-         }
-         //executeOutPut(symbol);
-      }
+   if (argc <= 1){   // Check if Null Pointer
+      cout << "Passed no argument.\n";
+      //interactione mode
+      interactionMode();
    }
    else{
-      //interactione mode
-      //interactionMode();
-      cout << "Hello" << endl;
-   }
+      string arg = argv[1];
+      string stringFile = argv[2];
+      vector<char> symbol;
 
+      if (arg == "-c"){ 
+         ifstream fin(stringFile.c_str());  // Can now compile on g++
+         if(fin.fail()){
+            //Fail to read file
+            cout << "Fail" << endl;
+         }else{
+            //Success read file
+            char c;
+
+            while(fin >> c){
+               symbol.push_back(c);
+            }
+            compileOutPut(symbol);
+         }
+      }
+      else if (arg == "-e"){
+         ifstream fin(stringFile.c_str());
+         if(fin.fail()){
+            //Fail to read file
+            cout << "Fail" << endl;
+         }else{
+            //Success read file
+            char c;
+            while(fin >> c){
+               //symbol.push_back(c);
+            }
+            //executeOutPut(symbol);
+         }
+      }
+      else{
+         cout << "Argument not found." << endl;
+      }
+   }
    return 0;
 }
 
@@ -63,7 +64,7 @@ void compileOutPut(vector<char> symbol){
    cout << "int *dp = tape;\n" << endl;
    cout << "int main() {" << endl;
 
-   for(int i = 0; i < symbol.size(); i++)
+   for(size_t i = 0; i < symbol.size(); i++)  // std::size_t fixed warning
    {
       switch(symbol[i])
       {
@@ -108,7 +109,7 @@ const int SIZE = 1000;
 int tape[SIZE] = {0};
 int *dp = tape;
 
-for(int i = 0; i < symbol.size(); i++)
+for(int i = 0; i < symbol.size(); i++)  //Also size_t
 {
 switch(symbol[i])
 {
