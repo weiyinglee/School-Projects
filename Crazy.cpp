@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <iomanip>
 using namespace std;
 
 void compileOutPut(vector<char>);
@@ -57,48 +58,50 @@ int main(int argc, char *argv[]){
 }
 
 void compileOutPut(vector<char> symbol){
-
    cout << "#include <iostream>\n" << endl;
    cout << "const int SIZE = 1000;" << endl;
    cout << "int tape[SIZE] = {0};" << endl;
    cout << "int *dp = tape;\n" << endl;
    cout << "int main() {" << endl;
 
+   int count = 4;
+
    for(size_t i = 0; i < symbol.size(); i++)  // std::size_t fixed warning
    {
       switch(symbol[i])
       {
       case '+':
-         cout << "\t++*dp;" << endl; 
+         cout << setw(count) << "" << "++*dp;" << endl; 
          break;
-
       case '-':
-         cout << "\t--*dp;" << endl;
+         cout << setw(count) << "" << "--*dp;" << endl;
          break;
       case '>':
-         cout << "\t++dp;" << endl;
+         cout << setw(count) << "" << "++dp;" << endl;
          break;
       case '<':
-         cout << "\t--dp;" << endl;
+         cout << setw(count) << "" << "--dp;" << endl;
          break;
       case ':':
-         cout << "\tstd::cout << *dp;" << endl;
+         cout << setw(count) << "" << "std::cout << *dp;" << endl;
          break;
       case '.':
-         cout << "\tstd::cout << ((char) *dp);" << endl;
+         cout << setw(count) << "" << "std::cout << ((char) *dp);" << endl;
          break;
       case '{':
-         cout << "\twhile (*dp) {" << endl;
+         cout << setw(count) << "" << "while (*dp) {" << endl;
+         count += 4;
          break;
       case '}':
-         cout << "\t}" << endl;
+         cout << setw(count - 4) << "" << "}" << endl;
+         count -= 4;
          break;
       default:
          break;
       }
    }
 
-   cout << "\treturn 0;" << endl;
+   cout << "    return 0;" << endl;
    cout << "}" << endl;
 }
 
