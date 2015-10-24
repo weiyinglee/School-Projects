@@ -10,43 +10,43 @@ void interactionMode();
 
 int main(int argc, char *argv[]){
 
-   if(argc != -1){
-      string arg = argv[1];
-      string stringFile = argv[2];
-      vector<char> symbol;
 
-         if (arg == "-c"){ 
+   string arg = argv[1];
+   string stringFile = argv[2];
+   vector<char> symbol;
 
-            ifstream fin(stringFile);
-            if(fin.fail()){
-               //Fail to read file
-               cout << "Fail" << endl;
-            }else{
-               //Success read file
-               char c;
-         
-               while(fin >> c){
-                  symbol.push_back(c);
-               }
-               compileOutPut(symbol);
-            }
+
+   if (arg == "-c"){ 
+      ifstream fin(stringFile.c_str());  // Can now compile on g++
+      if(fin.fail()){
+         //Fail to read file
+         cout << "Fail" << endl;
+      }else{
+         //Success read file
+         char c;
+
+         while(fin >> c){
+            symbol.push_back(c);
          }
-         else if (arg == "-e"){
-            ifstream fin(stringFile);
-            if(fin.fail()){
-               //Fail to read file
-               cout << "Fail" << endl;
-            }else{
-               //Success read file
-               char c;
-               while(fin >> c){
-                  //symbol.push_back(c);
+         compileOutPut(symbol);
+      }
+   }
+   else if (arg == "-e"){
+      ifstream fin(stringFile.c_str());
+      if(fin.fail()){
+         //Fail to read file
+         cout << "Fail" << endl;
+      }else{
+         //Success read file
+         char c;
+         while(fin >> c){
+            //symbol.push_back(c);
 
-               }
-               //executeOutPut(symbol);
-            }
          }
-   }else{
+         //executeOutPut(symbol);
+      }
+   }
+   else{
       //interactione mode
       //interactionMode();
       cout << "Hello" << endl;
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]){
 }
 
 void compileOutPut(vector<char> symbol){
-   
+
    cout << "#include <iostream>\n" << endl;
    cout << "const int SIZE = 1000;" << endl;
    cout << "int tape[SIZE] = {0};" << endl;
@@ -67,33 +67,33 @@ void compileOutPut(vector<char> symbol){
    {
       switch(symbol[i])
       {
-         case '+':
-            cout << "\t++*dp;" << endl; 
-            break;
+      case '+':
+         cout << "\t++*dp;" << endl; 
+         break;
 
-         case '-':
-            cout << "\t--*dp;" << endl;
-            break;
-         case '>':
-            cout << "\t++dp;" << endl;
-            break;
-         case '<':
-            cout << "\t--dp;" << endl;
-            break;
-         case ':':
-            cout << "\tstd::cout << *dp;" << endl;
-            break;
-         case '.':
-            cout << "\tstd::cout << ((char) *dp);" << endl;
-            break;
-         case '{':
-            cout << "\twhile (*dp) {" << endl;
-            break;
-         case '}':
-            cout << "\t}" << endl;
-            break;
-         default:
-            break;
+      case '-':
+         cout << "\t--*dp;" << endl;
+         break;
+      case '>':
+         cout << "\t++dp;" << endl;
+         break;
+      case '<':
+         cout << "\t--dp;" << endl;
+         break;
+      case ':':
+         cout << "\tstd::cout << *dp;" << endl;
+         break;
+      case '.':
+         cout << "\tstd::cout << ((char) *dp);" << endl;
+         break;
+      case '{':
+         cout << "\twhile (*dp) {" << endl;
+         break;
+      case '}':
+         cout << "\t}" << endl;
+         break;
+      default:
+         break;
       }
    }
 
@@ -104,43 +104,43 @@ void compileOutPut(vector<char> symbol){
 /*
 void executeOutPut(vector<char> symbol){
 
-   const int SIZE = 1000;
-   int tape[SIZE] = {0};
-   int *dp = tape;
-   
-   for(int i = 0; i < symbol.size(); i++)
-   {
-      switch(symbol[i])
-      {
-         case '+':
-            cout << "\t++*dp;" << endl; 
-            break;
+const int SIZE = 1000;
+int tape[SIZE] = {0};
+int *dp = tape;
 
-         case '-':
-            cout << "\t--*dp;" << endl;
-            break;
-         case '>':
-            cout << "\t++dp;" << endl;
-            break;
-         case '<':
-            cout << "\t--dp;" << endl;
-            break;
-         case ':':
-            cout << "\tstd::cout << *dp;" << endl;
-            break;
-         case '.':
-            cout << "\tstd::cout << ((char) *dp);" << endl;
-            break;
-         case '{':
-            cout << "\twhile (*dp) {" << endl;
-            break;
-         case '}':
-            cout << "\t}" << endl;
-            break;
-         default:
-            break;
-      }
-   }
+for(int i = 0; i < symbol.size(); i++)
+{
+switch(symbol[i])
+{
+case '+':
+cout << "\t++*dp;" << endl; 
+break;
+
+case '-':
+cout << "\t--*dp;" << endl;
+break;
+case '>':
+cout << "\t++dp;" << endl;
+break;
+case '<':
+cout << "\t--dp;" << endl;
+break;
+case ':':
+cout << "\tstd::cout << *dp;" << endl;
+break;
+case '.':
+cout << "\tstd::cout << ((char) *dp);" << endl;
+break;
+case '{':
+cout << "\twhile (*dp) {" << endl;
+break;
+case '}':
+cout << "\t}" << endl;
+break;
+default:
+break;
+}
+}
 }
 */
 
