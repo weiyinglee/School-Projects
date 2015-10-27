@@ -1,3 +1,7 @@
+// Shun Lu and WeiYing Lee
+//	Homework 4
+//	Completed on 10/27/15
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -15,7 +19,6 @@ int main(int argc, char *argv[]){
    int *dp = tape;
 
    if (argc <= 1){   // Check if Null Pointer
-      //interactione mode
       interactionMode(tape, dp, 0);
    }
    else{
@@ -128,11 +131,11 @@ void executeOutPut(vector<char> symbol, int*& dp, int position, int count){
          position++;
          break;
       case ':':
-         cout << *dp << endl;
+         cout << *dp;
          position++;
          break;
       case '.':
-         cout << ((char) *dp) << endl;
+         cout << ((char) *dp);
          position++;
          break;
       case '{':
@@ -220,7 +223,7 @@ void interactionMode(int* tape, int*& dp, int count){
          if(&tape[i + count - 4] == dp){
             cout << setw(5) << right << '^';
          }else{
-            cout << setw(5) << right << "X";
+            cout << setw(5) << right << " ";
          }
       }else{
          if(count <= 0){
@@ -230,7 +233,7 @@ void interactionMode(int* tape, int*& dp, int count){
          if(&tape[i] == dp){
             cout << setw(5) << right << '^';
          }else{
-            cout << setw(5) << right << "X";
+            cout << setw(5) << right << " ";
          }
       }
    }
