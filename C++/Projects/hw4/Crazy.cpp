@@ -1,6 +1,6 @@
 // Shun Lu and WeiYing Lee
-//	Homework 4
-//	Completed on 10/27/15
+// Homework 4
+// Completed 10/27/2015
 
 #include <iostream>
 #include <fstream>
@@ -10,16 +10,17 @@
 using namespace std;
 
 void compileOutPut(vector<char>);
-void executeOutPut(vector<char> symbol, int*& dp, int position, int count);
-void interactionMode(int* tape, int*& dp, int count);
+void executeOutPut(vector<char> symbol, int*& dp, int position, int count, int& direction);
+void interactionMode(int* tape, int*& dp, int& count);
 
 int main(int argc, char *argv[]){
    const int SIZE = 1000;
    int tape[SIZE] = {0};
    int *dp = tape;
+   int direction = 0;  // This tracks pointer's position
 
    if (argc <= 1){   // Check if Null Pointer
-      interactionMode(tape, dp, 0);
+      interactionMode(tape, dp, direction);
    }
    else{
       string arg = argv[1];
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]){
       vector<char> symbol;
 
       if (arg == "-c"){ 
-         ifstream fin(stringFile.c_str());  // Can now compile on g++
+         ifstream fin(stringFile.c_str());
          if(fin.fail()){
             //Fail to read file
             cout << "Fail" << endl;
@@ -42,16 +43,16 @@ int main(int argc, char *argv[]){
          }
       }else if (arg == "-e"){
          ifstream fin(stringFile.c_str());
-         if(fin.fail()){
+         if (fin.fail()){
             //Fail to read file
             cout << "Fail" << endl;
          }else{
             //Success read file
             char c;
-            while(fin >> c){
+            while (fin >> c){
                symbol.push_back(c);
             }
-            executeOutPut(symbol, dp, 0, 0);
+            executeOutPut(symbol, dp, 0, 0, direction);
          }
       }else{
          cout << "Argument not found." << endl;
@@ -69,9 +70,9 @@ void compileOutPut(vector<char> symbol){
 
    int count = 4;
 
-   for(size_t i = 0; i < symbol.size(); i++)  // std::size_t fixed warning
+   for (size_t i = 0; i < symbol.size(); i++)
    {
-      switch(symbol[i])
+      switch (symbol[i])
       {
       case '+':
          cout << setw(count) << "" << "++*dp;" << endl; 
@@ -107,12 +108,12 @@ void compileOutPut(vector<char> symbol){
    cout << "}" << endl;
 }
 
-void executeOutPut(vector<char> symbol, int*& dp, int position, int count){
+void executeOutPut(vector<char> symbol, int*& dp, int position, int count, int& direction){
    int temp = 0;
 
    while (position < symbol.size())
    {
-      switch(symbol[position])
+      switch (symbol[position])
       {
       case '+':
          ++*dp;
@@ -125,10 +126,12 @@ void executeOutPut(vector<char> symbol, int*& dp, int position, int count){
       case '>':
          ++dp;
          position++;
+         direction++;
          break;
       case '<':
          --dp;
          position++;
+         direction--;
          break;
       case ':':
          cout << *dp;
@@ -139,7 +142,7 @@ void executeOutPut(vector<char> symbol, int*& dp, int position, int count){
          position++;
          break;
       case '{':
-         if(*dp == 0){
+         if (*dp == 0){
             count++;
             temp = position;
             while (count != 0){
@@ -175,66 +178,64 @@ void executeOutPut(vector<char> symbol, int*& dp, int position, int count){
    }
 }
 
-void interactionMode(int* tape, int*& dp, int count){
+void interactionMode(int* tape, int*& dp, int& count){
    string command;	//for users to input symbols
-   const int SIZE = 1000;
-   int position[SIZE];
-   char pointer[SIZE];
+   char character;
+
 
    cout << "\nPosition:   ";
-   for(int i = 0; i < 10; i++){	//only showing 10 cells at a time
-      if(count >= 10){
-         position[i] = i + count;
-         cout << setw(5) << right << position[i] - 4;
-      }else{
-         position[i] = i;
-         cout << setw(5) << right << position[i];
-      }	
-   }
-   cout << "\n";
-
-   cout << "Integer:    ";
-   for(int i = 0; i < 10; i++){	//only showing 10 cells at a time
-      if(count >= 10){
-         cout<< setw(5) << right << tape[i + count - 4];
-      }else{
-         cout<< setw(5) << right << tape[i];
-      }
+   for (int i = 0; i < 10; i++){
+      if (count < 5)
+         cout << setw(5) << right << i;
+      else
+         cout << setw(5) << right << i + count - 4;
    }
    cout << "\n";
 
    cout << "Character:  ";
-   for(int i = 0; i < 10; i++){
-      if(count >= 10){
-         cout<< setw(5) << right << (char)tape[i + count - 4];
-      }else{
-         cout<< setw(5) << right << (char)tape[i];
+   for (int i = 0; i < 10; i++){
+      if (count < 5){
+         if (tape[i] >= 33)
+            cout << setw(5) << right << static_cast<char>(tape[i]);
+         else
+            cout << setw(5) << right << " ";
+      }
+      else{
+         if (tape[i + count - 4] >= 33)
+            cout << setw(5) << right << static_cast<char>(tape[i + count -4]);
+         else
+            cout << setw(5) << right << " ";
       }
    }
    cout << "\n";
 
+   cout << "Integer:    ";
+   for (int i = 0; i < 10; i++){
+      if (count < 5)
+         cout << setw(5) << right << tape[i];
+      else
+         cout << setw(5) << right << tape[i + count - 4];
+   }
+   cout << "\n";
+
    cout << "Pointer:    ";
-   for(int i = 0; i < 10; i++){
-      if(count >= 10){
-         if(count > 991){
-            count = 991;
-            dp = (tape + SIZE - 1);
-         }
-         if(&tape[i + count - 4] == dp){
+   for (int i = 0; i < 10; i++){
+      if (count >= 5){
+         if (count >= 994)
+            dp = &tape[999];
+         if (&tape[i + count - 4] == dp)
             cout << setw(5) << right << '^';
-         }else{
+         else
             cout << setw(5) << right << " ";
-         }
       }else{
-         if(count <= 0){
+         if (count <= 0){
             dp = tape;
             count = 0;
          }
-         if(&tape[i] == dp){
+         if (&tape[i] == dp)
             cout << setw(5) << right << '^';
-         }else{
+         else
             cout << setw(5) << right << " ";
-         }
       }
    }
    cout << "\n";
@@ -243,19 +244,14 @@ void interactionMode(int* tape, int*& dp, int count){
 
    vector<char> symbol;
 
-   for(int i = 0; i < command.length(); i++){
+   for (int i = 0; i < command.length(); i++){
       symbol.push_back(command[i]);
-      if(command[i] == '>'){
-         count++;
-      }else if(command[i] == '<'){
-         count--;
-      }
    }
-   if(count > 991){
-      count = 991;
-      dp = (tape + SIZE - 1);
+   executeOutPut(symbol, dp, 0, 0, count);
+
+   if (count > 994){
+      count = 994;
    }
-   executeOutPut(symbol, dp, 0, 0);
    interactionMode(tape, dp, count);
 }
 
