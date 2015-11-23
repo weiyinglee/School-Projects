@@ -365,7 +365,8 @@ std::string Matrix::str() const
 int main()
 {
     // testing allocations
-    /*for (;;)
+    /*
+	for (;;)
     {
         Matrix m(10000, 10000);
     }
